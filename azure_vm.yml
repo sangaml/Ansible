@@ -31,7 +31,7 @@
     azure_rm_securitygroup:
       resource_group: myResourceGroup
       name: myNetworkSecurityGroup
-rules:
+      rules:
         - name: SSH
           protocol: Tcp
           destination_port_range: 22
