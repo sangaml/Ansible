@@ -2,6 +2,6 @@
 - hosts: new-inventory
   tasks:
    - name: Create file
-       file:
+     file:
            path: /tmp/hello1
            state: touch
