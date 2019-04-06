@@ -1,0 +1,35 @@
+---
+- hosts: webserver # Nodes Group name or server hostname
+  become: yes
+  tasks: 
+    - name: Install multiple packages
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - python-pip
+        - python-virtualenv
+
+    - name: Start and  Enable Services
+      service: name=apache2 state=started enabled=yes
+
+    - name: Enabled Apache Module
+      apache2_module: state=present name=wsgi 
+      notify: Restart apache2  # if there is any changes in apache module then only handlers will trigger "NOTE: name of the handlers should be past in the notify section"
+
+    - name: Copy files 
+      copy: src=demo/app/ dest=/var/www/demo mode=0755
+      notify: Restart apache2
+    
+    - name: Setup python virtual env
+      pip: requirements=/var/www/demo/reqirements.txt virtualenv=/var/www/demo/.venv
+
+    - name: Create Sysmbolink between files
+      file: src=/etc/apache2/sites-avaialble/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
+      notify: Restart apache2
+            
+  handlers:
+    - name: Restart apache2
+      service: name=apache2 state=restarted
+
+      #pip is simple package managment tool for the python 
