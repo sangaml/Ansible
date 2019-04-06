@@ -1,0 +1,22 @@
+---
+- hosts: webserver # Nodes Group name or server hostname
+  become: yes
+  tasks: 
+    - name: Install multiple packages
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - python-pip
+        - python-virtualenv
+
+    - name: Start and  Enable Services
+      service: name=apache2 state=started enabled=yes
+
+    - name: Enabled Apache Module
+      apache2_module: state=present name=wsgi 
+      notify: Restart apache2  # if there is any changes in apache module then only handlers will trigger "NOTE: name of the handlers should be past in the notify section"
+
+  handlers:
+    - name: Restart apache2
+      service: name=apache2 state=restarted
