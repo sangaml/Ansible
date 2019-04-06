@@ -2,6 +2,9 @@
 - hosts: webserver
   become: yes
   tasks:
+    - name: Install tool
+      apt: name=python-mysqldb state=present update_cache=yes 
+   
     - name: Install Mysql-server
       apt: name=mysql-server state=present update_cache=yes
 
@@ -9,6 +12,12 @@
       lineinfile: dest=/etc/mysql/my.cnf regexp=^bind-address
                  line="bind-address = 0.0.0.0"
       notify: restart mysql-server
+
+    - name: create demo databases
+      mysql_db: name=demo state=present
+
+    - name: create demo user
+      mysql_user: name=demo password=Password@123 priv=demo.*:ALL host='%' state=present
 
   handleres:
     - name: restart mysql-server
