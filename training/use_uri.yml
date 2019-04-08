@@ -1,0 +1,12 @@
+---
+-hosts: loadbalancer
+ become: yes
+ tasks: 
+   - name: check the end to end application response # make sure python-hhtplib2 should be install on end point node and the controller node
+     uri: url=http://{{item}} return_content=yes
+     with_item: groups.loadbalancer  # check the url response with loadbalancer group
+     register: lb_index  # Store the output into the lb_index variable and then we can use the same variable value in latter use
+
+   - fail: msg="index faild to return content"
+     when: "'Hello from sunny' not in item.content" # tasks get faild when output doesn't content Hello from sunny
+     with_items: "{{lb_index.result}}"
