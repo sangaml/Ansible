@@ -1,0 +1,6 @@
+---
+- name: install databases
+  apt: name=mysql-server state=present update_cache=yes
+
+- name: Start and enable service
+  service: name=mysql state=started enabled=yes
