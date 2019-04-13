@@ -1,0 +1,7 @@
+---
+- hosts: mysql
+  become: yes
+  roles:
+    - mysql  # use ansible galaxy and roles
+
+    # Roles are basically used to called the dynamic tasks 

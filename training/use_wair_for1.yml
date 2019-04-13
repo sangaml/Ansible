@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: stop nginx
+      service: name=nginx state=stopped
+    - wait_for: port=80 state=drained   # wait until Stop the traffic on that port
+
+   - name: stop Apache2
+     service: name=apache2 state=stopped
+     wait_for: port=80 state=stopped
+
+   - name: start nginx
+     service: name=nginx state=started
+     wait_for: port=80 state=started

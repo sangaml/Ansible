@@ -1,1 +1,11 @@
+<<<<<<< HEAD
 test
+=======
+---
+- hosts: new-inventory
+  tasks:
+   - name: Create file
+     file:
+           path: /tmp/hello1
+           state: touch
+>>>>>>> f8ff827c3205877784ceaa5a3f6a6b0f9758a80a
