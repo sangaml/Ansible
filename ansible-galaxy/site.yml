@@ -1,0 +1,3 @@
+---
+- include: control.yml #include to call many yml files in single file
+- include: database.yml
